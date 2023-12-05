@@ -1,4 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { RegisterUserDTO } from './dto/register-user.dto';
 import { AuthService } from './auth.service';
 import { LoginUserDTO } from './dto/login-user.dto';
@@ -12,7 +18,12 @@ export class AuthController {
     return this.authService.regiter(body);
   }
   @Post('login')
+  @UsePipes(ValidationPipe)
   login(@Body() body: LoginUserDTO) {
-    
+    return this.authService.login(body);
+  }
+  @Post('refresh-token')
+  refreshToken(@Body() { refresh_token }): Promise<any> {
+    return this.authService.refreshToken(refresh_token);
   }
 }
